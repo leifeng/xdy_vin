@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        textarea {
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea id="t1"></textarea>
+    <textarea id="t2"></textarea>
+    <br/>
+    <a id="btn">转换</a>
+</body>
+<script>
+    var t1=document.querySelector('#t1');
+    var t2=document.querySelector('#t2');
+    var btn=document.querySelector('#btn');
+    btn.addEventListener('click',function(e){
+        var _vin=t1.value.replace(/\n/g,',');
+        _vin=_vin.split(',').join("','")
+        t2.value="'"+_vin+"'";
+    },false)
+</script>
+
+</html>
