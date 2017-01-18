@@ -20,11 +20,14 @@ let files = fs.readdirSync('./xls/');
 files = files.filter(function (item, i) {
     return item.indexOf('xls') > 0
 })
+console.log(files);
+
 async.eachSeries(files, function (filesName, cb) {
     console.log('*********************开始' + filesName + '文件*********************')
     index = 0;
     let workbook = XLSX.readFile('./xls/' + filesName);
     workbook.SheetNames.forEach(function (sheetName) {
+        console.log(sheetName)
         var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
         if (roa.length > 0) {
             console.log('有数据');
@@ -52,11 +55,13 @@ function getData(item) {
             console.log('处理完成: ' + item.CAR_CODE);
             eval(body)
         } else {
+            console.log('request错误!!!!!!!!!!!!!!!!!!!!!!!!!!');
             NewData[index]['POSITION'] = "";
             NewData[index]['province'] = "";
             NewData[index]['city'] = "";
             NewData[index]['district'] = "";
             index++;
+            CALLBACK(null, index);
         }
 
     });
@@ -65,11 +70,15 @@ function getData(item) {
 
 function renderReverse(json) {
     if (json.status == '0') {
-        console.log(json.result.formatted_address)
+        console.log(index,json.result.formatted_address)
         NewData[index]['POSITION'] = json.result.formatted_address;
         NewData[index]['province'] = json.result.addressComponent.province;
         NewData[index]['city'] = json.result.addressComponent.city;
         NewData[index]['district'] = json.result.addressComponent.district;
+        index++;
+        CALLBACK(null, index);
+    } else {
+        console.log('地图API转换失败', json.status);
         index++;
         CALLBACK(null, index);
     }
